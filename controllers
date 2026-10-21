@@ -1,11 +1,30 @@
-const mysql = require('mysql2/promise');
+const bcrypt = require ("bcrypt")
 
-const db = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password:'',
-    database: 'projeto_backend_angela',
-    port: 3306      
-});
+const usuarioModel = require ("../model/UsuarioModel")
 
-module.exports = db;
+const criarUsuario = async (req,res) =>{
+    try {
+        const {
+                nome, 
+                login,
+                senha
+        } = req.body;
+
+        const senhaSecreta = await bcrypt.hash(senha);
+
+        await usuarioModel.criarUsuario(
+            nome,
+            login,
+            senhaSecreta
+        );
+
+        res.status(201).json({
+            mensagem:"Usuário criado com sucesso"
+        })
+    }
+        catch(erro) {
+            res.status(502).json({
+                mensagem:"Erro ao cadastrar usuário"
+            })
+    }
+}
