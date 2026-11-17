@@ -36,4 +36,4 @@ router.post(
     usuarioController.loginUsuario
 );
 
-module.exports = router
+module.exports = router ;
